@@ -21,7 +21,7 @@ import static android.content.ContentValues.TAG;
 
 public class MyLocation implements LocationListener {
 
-    public static ArrayList<Location> listLocation;
+    public static ArrayList<Location> listLocation=  new ArrayList<>();
 
     public static ArrayList<Location> getListLocation() {
         return listLocation;
@@ -38,7 +38,7 @@ public class MyLocation implements LocationListener {
         LocationListener locationListener = new MyLocation();
         Log.d(TAG, "SetUpLocationListener: BLA1");
         if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -49,9 +49,12 @@ public class MyLocation implements LocationListener {
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 10, locationListener);
 
-
+        Log.d(TAG, "SetUpLocationListener: BLA2");
         imHere = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        listLocation.add(imHere);
+        if(imHere!=null){
+         listLocation.add(imHere);
+            //Log.d(TAG, String.valueOf(imHere.getLatitude())+String.valueOf(imHere.getLongitude()));
+            }
     }
 
     @Override

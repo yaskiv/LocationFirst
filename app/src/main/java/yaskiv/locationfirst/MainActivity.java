@@ -3,6 +3,7 @@ package yaskiv.locationfirst;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        String svcName = Context.LOCATION_SERVICE;
+        LocationManager locationManager = (LocationManager) getSystemService(svcName);
 
         context = this;
         button = (Button) findViewById(R.id.buttonLocation);
@@ -80,12 +84,14 @@ public class MainActivity extends AppCompatActivity
     }
     private View.OnClickListener mListener = new View.OnClickListener() {
         public void onClick(View v) {
+
+
             MyLocation.SetUpLocationListener(context);
             TextView textView=(TextView)findViewById(R.id.textLocation);
-            while (true) {
+
                 if(MyLocation.listLocation!=null)
                 textView.setText(MyLocation.listLocation.toString());
-            }
+
 
         }
     };
