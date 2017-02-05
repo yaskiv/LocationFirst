@@ -2,7 +2,9 @@ package yaskiv.locationfirst;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +24,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -120,6 +126,20 @@ startOrStop=true;
                             Log.d("Size :",String.valueOf(MyLocation.listLocation.size()));
                             runOnUiThread(new Runnable() {
                                 public void run() {
+                                    if (MyLocation.listLocation.size() > 1) {
+                                        Polygon polygon = MapsActivity.mMap.addPolygon(new PolygonOptions()
+                                                .add(new LatLng(MyLocation.listLocation.get(
+                                                        MyLocation.listLocation.size() - 1)
+                                                        .getLatitude(), MyLocation.listLocation.get(
+                                                        MyLocation.listLocation.size() - 1)
+                                                        .getLongitude()), new LatLng(MyLocation.listLocation.get(
+                                                        MyLocation.listLocation.size() - 2)
+                                                        .getLatitude(), MyLocation.listLocation.get(
+                                                        MyLocation.listLocation.size() - 2)
+                                                        .getLongitude()))
+                                                .strokeColor(Color.RED)
+                                        );
+                                    }
                                     textView.setText(s);
                                 }});
 
@@ -133,7 +153,8 @@ startOrStop=true;
                 }
             };
             thread.start();
-
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            startActivity(intent);
 
         }
     };
