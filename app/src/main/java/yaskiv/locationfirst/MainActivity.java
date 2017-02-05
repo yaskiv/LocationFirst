@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,7 +26,11 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static Context context;
+    public static boolean startOrStop = true;
     Button button;
+    Button buttonStop;
+
+    public  static  TextView textView ;
 
     public Context getContext() {
         return context;
@@ -45,9 +50,13 @@ public class MainActivity extends AppCompatActivity
 
         context = this;
         button = (Button) findViewById(R.id.buttonLocation);
+        textView = (TextView) findViewById(R.id.textLocation);
         button.setOnClickListener(mListener);
+        buttonStop=(Button) findViewById(R.id.buttonLocationStop);
+        buttonStop.setOnClickListener(stopListener);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
@@ -82,15 +92,47 @@ public class MainActivity extends AppCompatActivity
             // permissions this app might request
         }
     }
+private  View.OnClickListener stopListener = new View.OnClickListener(){
+    public  void  onClick(View v)
+    {
+        startOrStop=false;
+    }
+};
+    public  static  String s;
     private View.OnClickListener mListener = new View.OnClickListener() {
         public void onClick(View v) {
-
-
             MyLocation.SetUpLocationListener(context);
-            TextView textView=(TextView)findViewById(R.id.textLocation);
+startOrStop=true;
+          Thread thread=   new Thread(){
+                @Override
+                public void run() {
 
-                if(MyLocation.listLocation!=null)
-                textView.setText(MyLocation.listLocation.toString());
+                    while (startOrStop) {
+
+                    MyLocation.LocationManagerWork();
+                        if (MyLocation.listLocation.size() != 0) {
+                            s = String.valueOf(MyLocation.listLocation.get(
+                                    MyLocation.listLocation.size() - 1)
+                                    .getLatitude()) + " " + String.valueOf(MyLocation.listLocation.get(
+                                    MyLocation.listLocation.size() - 1)
+                                    .getLongitude());
+                          Log.d("Set Text:",s);
+                            Log.d("Size :",String.valueOf(MyLocation.listLocation.size()));
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    textView.setText(s);
+                                }});
+
+                        }
+                        try {
+                            sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+            thread.start();
 
 
         }

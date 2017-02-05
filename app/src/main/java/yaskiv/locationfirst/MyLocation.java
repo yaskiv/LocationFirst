@@ -22,7 +22,7 @@ import static android.content.ContentValues.TAG;
 public class MyLocation implements LocationListener {
 
     public static ArrayList<Location> listLocation=  new ArrayList<>();
-
+public  static LocationManager locationManager;
     public static ArrayList<Location> getListLocation() {
         return listLocation;
     }
@@ -32,7 +32,7 @@ public class MyLocation implements LocationListener {
     public static void SetUpLocationListener(Context context) // это нужно запустить в самом начале работы программы
     {
         Log.d(TAG, "SetUpLocationListener: BLA");
-        LocationManager locationManager = (LocationManager)
+       locationManager = (LocationManager)
                 context.getSystemService(Context.LOCATION_SERVICE);
 
         LocationListener locationListener = new MyLocation();
@@ -49,12 +49,29 @@ public class MyLocation implements LocationListener {
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 10, locationListener);
 
-        Log.d(TAG, "SetUpLocationListener: BLA2");
-        imHere = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(imHere!=null){
-         listLocation.add(imHere);
+
             //Log.d(TAG, String.valueOf(imHere.getLatitude())+String.valueOf(imHere.getLongitude()));
             }
+
+public static void LocationManagerWork()
+    { if (ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return;
+    }
+        Log.d(TAG, "SetUpLocationListener: BLA2");
+        imHere = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(imHere!=null) {
+            if(listLocation.size()!=0){
+            if(imHere.getLongitude()!=listLocation.get(listLocation.size()-1).getLongitude()||imHere.getLatitude()!=listLocation.get(listLocation.size()-1).getLatitude())
+            listLocation.add(imHere);}
+            else {listLocation.add(imHere);}
+        }
     }
 
     @Override

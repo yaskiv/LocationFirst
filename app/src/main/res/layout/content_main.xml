@@ -9,17 +9,25 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="yaskiv.locationfirst.MainActivity"
     tools:showIn="@layout/app_bar_main">
-<FrameLayout
+<LinearLayout
     android:layout_centerInParent="true"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <Button
         android:id="@+id/buttonLocation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/start"
         />
-</FrameLayout>
+    <Button
+
+        android:id="@+id/buttonLocationStop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/stop"
+        />
+</LinearLayout>
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
