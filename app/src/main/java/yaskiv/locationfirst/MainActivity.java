@@ -1,10 +1,14 @@
 package yaskiv.locationfirst;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,8 +41,19 @@ public class MainActivity extends AppCompatActivity
     public static boolean startOrStop = true;
     Button button;
     Button buttonStop;
+    Button buttonSave;
+    EditText text_for_name_of_map;
 
-    public  static  TextView textView ;
+    private static final String DATABASE_NAME = "AllWay.db";
+    SQLiteDatabase myDatabase;
+
+    private void createDatabase() {
+        myDatabase = openOrCreateDatabase(DATABASE_NAME, Context.MODE_PRIVATE,
+                null);
+
+    }
+
+    public static TextView textView;
 
     public Context getContext() {
         return context;
@@ -51,16 +67,20 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        DataBase dbh = new DataBase(this,DATABASE_NAME,null,1);
+        myDatabase = dbh.getWritableDatabase();
         String svcName = Context.LOCATION_SERVICE;
         LocationManager locationManager = (LocationManager) getSystemService(svcName);
-
+        createDatabase();
         context = this;
+        text_for_name_of_map=(EditText)findViewById(R.id.text_for_name);
         button = (Button) findViewById(R.id.buttonLocation);
         textView = (TextView) findViewById(R.id.textLocation);
         button.setOnClickListener(mListener);
-        buttonStop=(Button) findViewById(R.id.buttonLocationStop);
+        buttonStop = (Button) findViewById(R.id.buttonLocationStop);
         buttonStop.setOnClickListener(stopListener);
+        buttonSave = (Button) findViewById(R.id.buttonLocationSave);
+        buttonSave.setOnClickListener(saveListener);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -99,32 +119,61 @@ public class MainActivity extends AppCompatActivity
             // permissions this app might request
         }
     }
-private  View.OnClickListener stopListener = new View.OnClickListener(){
-    public  void  onClick(View v)
-    {
-        startOrStop=false;
-    }
-};
-    public  static  String s;
+
+    private View.OnClickListener saveListener = new View.OnClickListener() {
+        public void onClick(View v) {
+             ContentValues contentValues = new ContentValues();
+            contentValues.put("way_name", text_for_name_of_map.getText().toString());
+            myDatabase.insert("Way", null,contentValues );
+String id="";
+            String selectQuery = "SELECT id_of_way FROM Way WHERE way_name= ?";
+            Cursor c = myDatabase.rawQuery(selectQuery, new String[]{text_for_name_of_map.getText().toString()});
+            if (c.moveToFirst()) {
+                id = c.getString(c.getColumnIndex("id_of_way"));
+            }
+            c.close();
+            Log.d("ID=", id);
+
+int i=0;
+            for (Location loc : MyLocation.listLocation) {
+                ContentValues contentValues1 = new ContentValues();
+                contentValues1.put("id_of_way", id);
+                contentValues1.put("Latitude", loc.getLatitude());
+                contentValues1.put("Longitude", loc.getLongitude() );
+                myDatabase.insert("Way_of_Data", null,contentValues1 );
+
+                Log.d("ADD", String.valueOf(i));
+                i++;
+            }
+        }
+    };
+
+    private View.OnClickListener stopListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            startOrStop = false;
+        }
+    };
+    public static String s;
     private View.OnClickListener mListener = new View.OnClickListener() {
         public void onClick(View v) {
             MyLocation.SetUpLocationListener(context);
-startOrStop=true;
-          Thread thread=   new Thread(){
+            startOrStop = true;
+            Thread thread = new Thread() {
                 @Override
                 public void run() {
 
                     while (startOrStop) {
 
-                    MyLocation.LocationManagerWork();
+                        MyLocation.LocationManagerWork();
                         if (MyLocation.listLocation.size() != 0) {
                             s = String.valueOf(MyLocation.listLocation.get(
                                     MyLocation.listLocation.size() - 1)
                                     .getLatitude()) + " " + String.valueOf(MyLocation.listLocation.get(
                                     MyLocation.listLocation.size() - 1)
                                     .getLongitude());
-                          Log.d("Set Text:",s);
-                            Log.d("Size :",String.valueOf(MyLocation.listLocation.size()));
+
+                            Log.d("Set Text:", s);
+                            Log.d("Size :", String.valueOf(MyLocation.listLocation.size()));
                             runOnUiThread(new Runnable() {
                                 public void run() {
                                     if (MyLocation.listLocation.size() > 1) {
@@ -143,7 +192,8 @@ startOrStop=true;
 
                                     }
                                     textView.setText(s);
-                                }});
+                                }
+                            });
 
                         }
                         try {

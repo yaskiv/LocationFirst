@@ -27,6 +27,20 @@
         android:layout_height="match_parent"
         android:text="@string/stop"
         />
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/please_write_name_of_map"
+        android:id="@+id/text_for_name"
+        />
+    <Button
+
+        android:id="@+id/buttonLocationSave"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/Save"
+        />
+
 </LinearLayout>
     <FrameLayout
         android:layout_width="wrap_content"

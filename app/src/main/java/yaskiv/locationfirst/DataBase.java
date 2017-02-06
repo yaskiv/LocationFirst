@@ -21,16 +21,8 @@ public class DataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-       /* sqLiteDatabase.execSQL("CREATE TABLE Way (id_of_way INTEGER PRIMARY KEY AUTOINCREMENT,way_name varchar(20))");
+       sqLiteDatabase.execSQL("CREATE TABLE Way (id_of_way INTEGER PRIMARY KEY AUTOINCREMENT,way_name varchar(20))");
         sqLiteDatabase.execSQL("CREATE TABLE Way_of_Data (id_of_way INTEGER ,Latitude varchar(20),Longitude varchar(20))");
-
-        private static final String DATABASE_NAME = "myDatabase.db";
-        SQLiteDatabase myDatabase;
-        private void createDatabase() {
-            myDatabase = openOrCreateDatabase(DATABASE_NAME, Context.MODE_PRIVATE,
-                    null);
-            myDatabase.execSQL(DATABASE_CREATE);
-        }*/
 
     }
 
