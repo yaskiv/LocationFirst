@@ -1,6 +1,7 @@
 package yaskiv.locationfirst;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -42,10 +43,11 @@ public class MainActivity extends AppCompatActivity
     Button button;
     Button buttonStop;
     Button buttonSave;
+
     EditText text_for_name_of_map;
 
     private static final String DATABASE_NAME = "AllWay.db";
-    SQLiteDatabase myDatabase;
+    public static  SQLiteDatabase myDatabase;
 
     private void createDatabase() {
         myDatabase = openOrCreateDatabase(DATABASE_NAME, Context.MODE_PRIVATE,
@@ -250,9 +252,11 @@ int i=0;
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.my_maps) {
+            startActivity(new Intent(MainActivity.this,FullMaps.class));
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -268,4 +272,6 @@ int i=0;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }
