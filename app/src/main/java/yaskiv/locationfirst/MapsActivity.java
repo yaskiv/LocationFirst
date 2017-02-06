@@ -45,7 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             myLocationInMoment = new LatLng(MyLocation.listLocation.get(MyLocation.listLocation.size()-1).getLatitude(),
                     MyLocation.listLocation.get(MyLocation.listLocation.size()-1).getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocationInMoment));
-            mMap.setMinZoomPreference(8);
+            mMap.setMinZoomPreference(16);
         }
       //  mMap.addMarker(new MarkerOptions().position(myLocationInMoment).title("Marker in Sydney"));
 
