@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -139,6 +140,7 @@ startOrStop=true;
                                                         .getLongitude()))
                                                 .strokeColor(Color.RED)
                                         );
+
                                     }
                                     textView.setText(s);
                                 }});
