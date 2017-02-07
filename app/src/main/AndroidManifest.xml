@@ -38,7 +38,10 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait" />
-        <activity android:name=".FullMaps"></activity>
+        <activity android:name=".FullMaps" />
+        <activity
+            android:name=".MapsActivity_for_History"
+            android:label="@string/title_activity_maps_for__history"></activity>
     </application>
 
 </manifest>
