@@ -1,7 +1,15 @@
 package yaskiv.locationfirst;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,10 +18,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
+import static yaskiv.locationfirst.MainActivity.context;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static GoogleMap mMap;
-
+    private Button buttonScreen;
+private  View rootView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +36,66 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        buttonScreen=(Button)findViewById(R.id.button_screenshot);
+        buttonScreen.setOnClickListener(TakeScreen);
+      rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+    }
+    public static Bitmap getScreenShot(View view) {
+        View screenView = view.getRootView();
+        screenView.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
+        screenView.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+    static  String dirPath1="";
+    public static void store(Bitmap bm, String fileName){
+        final  String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
+        dirPath1=dirPath;
+        File dir = new File(dirPath);
+        if(!dir.exists())
+            dir.mkdirs();
+        File file = new File(dirPath, fileName);
+        dirPath1=file.getAbsolutePath();
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    private void shareImage(File file){
+        Uri uri = Uri.fromFile(file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        try {
+            startActivity(Intent.createChooser(intent, "Share Screenshot"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "No App Available", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private View.OnClickListener TakeScreen = new View.OnClickListener() {
+        public void onClick(View v)
+        {
+
+            store(getScreenShot(rootView),"name");
+           // File file=new File( Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots/name.png");
+            Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            File file = new File(dirPath1);
+            String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
+            String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            myIntent.setDataAndType(Uri.fromFile(file),mimetype);
+            startActivity(myIntent);
+           // startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(dirPath1+".png")));
+
+        }};
 
     /**
      * Manipulates the map once available.
