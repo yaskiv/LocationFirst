@@ -21,11 +21,10 @@ import java.util.ArrayList;
 
 public class FullMaps extends AppCompatActivity {
 public ListView listView;
-    public static String Latitude="";
-    public static String Longitude="";
-    ArrayList<String> list = new ArrayList<>();
-    ArrayAdapter<String> adapter;
 
+    public static ArrayList<String> list = new ArrayList<>();
+    ArrayAdapter<String> adapter;
+public static int position;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,35 +48,11 @@ public ListView listView;
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3)
+            public void onItemClick(AdapterView<?> arg0, View arg1, final int position, long arg3)
             {
 
-                String selectQuery = "SELECT Latitude,Longitude FROM Way_of_Data where way_name=?";
-                Cursor c = MainActivity.myDatabase.rawQuery(selectQuery,new String[]{list.get(position-1)});
-                int count=0;
 
-                if(c.moveToFirst()){
-                    do{
-
-                       if(count>0){
-
-
-
-                        Polygon polygon = MapsActivity_for_History.mMap.addPolygon(new PolygonOptions()
-                                .add(new LatLng(Double.parseDouble(Latitude),Double.parseDouble( Longitude)),
-                                        new LatLng(Double.parseDouble(c.getString(0)),Double.parseDouble( c.getString(1)))
-                                        )
-                                .strokeColor(Color.RED));}
-                        Latitude=c.getString(0);
-                        Longitude=c.getString(1);
-
-                        count++;
-
-
-                    }while(c.moveToNext());
-                }
-                c.close();
-
+FullMaps.position=position;
                 startActivity(new Intent(FullMaps.this,MapsActivity_for_History.class));
             }
         });
