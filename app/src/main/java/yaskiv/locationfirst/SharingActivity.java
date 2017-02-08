@@ -67,7 +67,7 @@ public class SharingActivity extends AppCompatActivity{
         Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         SharePhoto photo = new SharePhoto.Builder()
                 .setBitmap(image)
-                .setCaption("Give me my codez or I will ... you know, do that thing you don't like!")
+                .setCaption("My way")
                 .build();
 
         SharePhotoContent content = new SharePhotoContent.Builder()

@@ -25,9 +25,7 @@ import java.util.List;
 
 public class Share extends AppCompatActivity {
 
-    private CallbackManager callbackManager;
-    private LoginManager loginManager;
-    private static   Activity act;
+
 
 private Button button_facebook;
     @Override
@@ -36,59 +34,12 @@ private Button button_facebook;
         setContentView(R.layout.activity_share);
         button_facebook=(Button)findViewById(R.id.facebool_button);
         button_facebook.setOnClickListener(facebookClickShare);
-       act=this;
+
     }
     public View.OnClickListener facebookClickShare = new View.OnClickListener() {
         public void onClick(View v) {
-           /* FacebookSdk.sdkInitialize(getApplicationContext());
-
-            callbackManager = CallbackManager.Factory.create();
-
-            List<String> permissionNeeds = Arrays.asList("publish_actions");
-
-            //this loginManager helps you eliminate adding a LoginButton to your UI
-            LoginManager manager = LoginManager.getInstance();
-
-            manager.logInWithPublishPermissions(act, permissionNeeds);
-
-            manager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
-            {
-                @Override
-                public void onSuccess(LoginResult loginResult)
-                {
-                    sharePhotoToFacebook();
-                }
-
-                @Override
-                public void onCancel()
-                {
-                    System.out.println("onCancel");
-                }
-
-                @Override
-                public void onError(FacebookException error) {
-                    System.out.println("onError");
-                }
-
-
-            });*/
             startActivity(new Intent(Share.this,SharingActivity.class));
         }};
 
-    private void sharePhotoToFacebook(){
-        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
-        SharePhoto photo = new SharePhoto.Builder()
-                .setBitmap(image)
-                .setCaption("Give me my codez or I will ... you know, do that thing you don't like!")
-                .build();
-
-
-        SharePhotoContent content = new SharePhotoContent.Builder()
-                .addPhoto(photo)
-                .build();
-
-        ShareApi.share(content, null);
-
-    }
 }

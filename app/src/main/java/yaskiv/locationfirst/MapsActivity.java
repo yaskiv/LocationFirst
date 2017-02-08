@@ -19,16 +19,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.util.Date;
 
 import static yaskiv.locationfirst.MainActivity.context;
+import static yaskiv.locationfirst.R.id.imageView;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public static GoogleMap mMap;
     private Button buttonScreen;
 private  View rootView;
+    Bitmap mbitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +87,17 @@ private  View rootView;
             Toast.makeText(context, "No App Available", Toast.LENGTH_SHORT).show();
         }
     }
+    public Bitmap getBitmapOFRootView(View v) {
+        View rootview = v.getRootView();
+        rootview.setDrawingCacheEnabled(true);
+        Bitmap bitmap1 = rootview.getDrawingCache();
+        return bitmap1;
+    }
+
     private View.OnClickListener TakeScreen = new View.OnClickListener() {
         public void onClick(View v)
         {
-
+/*
             store(getScreenShot(rootView),"name");
            // File file=new File( Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots/name.png");
             Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
@@ -95,9 +107,34 @@ private  View rootView;
             String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
             myIntent.setDataAndType(Uri.fromFile(file),mimetype);
             startActivity(myIntent);
-           // startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(dirPath1+".png")));
+           // startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(dirPath1+".png")));*/
+
+            mbitmap = getBitmapOFRootView(rootView);
+            createImage(mbitmap);
+            Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
+
+            String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file1).toString());
+            String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            myIntent.setDataAndType(Uri.fromFile(file1),mimetype);
+            startActivity(myIntent);
 
         }};
+    public  File file1;
+    public void createImage(Bitmap bmp) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        File file = new File(Environment.getExternalStorageDirectory() +
+                "/"+ DateFormat.getDateTimeInstance().format(new Date())+".jpg");
+file1=file;
+        try {
+            file.createNewFile();
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(bytes.toByteArray());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Manipulates the map once available.
