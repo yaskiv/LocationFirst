@@ -38,6 +38,7 @@ private  View rootView;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -124,7 +125,7 @@ private  View rootView;
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
         File file = new File(Environment.getExternalStorageDirectory() +
-                "/"+ DateFormat.getDateTimeInstance().format(new Date())+".jpg");
+                "/Screenshots/"+ DateFormat.getDateTimeInstance().format(new Date())+".jpg");
 file1=file;
         try {
             file.createNewFile();
