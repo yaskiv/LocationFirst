@@ -1,15 +1,20 @@
 package yaskiv.locationfirst;
 
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,10 +26,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Date;
 
+import static android.R.attr.bitmap;
 import static yaskiv.locationfirst.MainActivity.context;
 import static yaskiv.locationfirst.R.id.imageView;
 
@@ -33,7 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static GoogleMap mMap;
     private Button buttonScreen;
 private  View rootView;
-    Bitmap mbitmap;
+   public static Bitmap mbitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,48 +103,42 @@ private  View rootView;
         Bitmap bitmap1 = rootview.getDrawingCache();
         return bitmap1;
     }
-
+String path;
+    public  static File file1;
     private View.OnClickListener TakeScreen = new View.OnClickListener() {
         public void onClick(View v)
         {
-/*
-            store(getScreenShot(rootView),"name");
-           // File file=new File( Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots/name.png");
-            Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
-            File file = new File(dirPath1);
-            Log.d("!!!!!!!!", dirPath1);
-            String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString());
-            String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            myIntent.setDataAndType(Uri.fromFile(file),mimetype);
-            startActivity(myIntent);
-           // startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(dirPath1+".png")));*/
 
-            mbitmap = getBitmapOFRootView(rootView);
-            createImage(mbitmap);
-            Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW);
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                public void onMapLoaded() {
+                    mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                        public void onSnapshotReady(Bitmap bitmap) {
+                            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                            path=Environment.getExternalStorageDirectory() +
+                                    "/Screenshots/"+"nnnmw" +".jpg";
+                            //DateFormat.getDateTimeInstance().format(new Date())
+                            Log.d("PAth", path);
+                            File file = new File(path);
 
-            String extension = android.webkit.MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file1).toString());
-            String mimetype = android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-            myIntent.setDataAndType(Uri.fromFile(file1),mimetype);
-            startActivity(myIntent);
-
+                            file1=file;
+                            try {
+                                file.createNewFile();
+                                FileOutputStream outputStream = new FileOutputStream(file);
+                                outputStream.write(bytes.toByteArray());
+                                outputStream.close();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
         }};
-    public  File file1;
-    public void createImage(Bitmap bmp) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-        File file = new File(Environment.getExternalStorageDirectory() +
-                "/Screenshots/"+ DateFormat.getDateTimeInstance().format(new Date())+".jpg");
-file1=file;
-        try {
-            file.createNewFile();
-            FileOutputStream outputStream = new FileOutputStream(file);
-            outputStream.write(bytes.toByteArray());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
+
+
+
 
     /**
      * Manipulates the map once available.

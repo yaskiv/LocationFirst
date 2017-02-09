@@ -3,6 +3,7 @@ package yaskiv.locationfirst;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -28,7 +29,7 @@ public class SharingActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.content_main    );
 
             FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -64,9 +65,16 @@ public class SharingActivity extends AppCompatActivity{
         }
 
     private void sharePhotoToFacebook(){
-        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        SharePhoto photo = new SharePhoto.Builder()
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_ndm);
+
+        image=MapsActivity.mbitmap;
+
+       /* SharePhoto photo = new SharePhoto.Builder()
                 .setBitmap(image)
+                .setCaption("My way")
+                .build();*/
+        SharePhoto photo = new SharePhoto.Builder()
+                .setImageUrl(Uri.fromFile(MapsActivity.file1))
                 .setCaption("My way")
                 .build();
 

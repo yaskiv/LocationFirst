@@ -28,8 +28,8 @@
         android:text="@string/stop"
         />
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
         android:text="@string/please_write_name_of_map"
         android:id="@+id/text_for_name"
         />
