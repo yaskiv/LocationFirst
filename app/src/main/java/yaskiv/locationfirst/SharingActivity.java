@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -58,7 +59,7 @@ public class SharingActivity extends AppCompatActivity{
 
                 @Override
                 public void onError(FacebookException error) {
-
+                    Log.d("Facebook error", error.getMessage());
                 }
 
             });

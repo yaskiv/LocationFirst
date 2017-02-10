@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -46,6 +47,8 @@ private Button button_facebook;
         Bitmap myBitmap = BitmapFactory.decodeFile(MapsActivity.file1.getAbsolutePath());
         imageView.setImageBitmap(myBitmap);
 
+
+
     }
     public View.OnClickListener facebookClickShare = new View.OnClickListener() {
         public void onClick(View v) {
@@ -54,31 +57,36 @@ private Button button_facebook;
             FacebookSdk.sdkInitialize(getApplicationContext());
 
             callbackManager = CallbackManager.Factory.create();
-
             List<String> permissionNeeds = Arrays.asList("publish_actions");
 
-            //this loginManager helps you eliminate adding a LoginButton to your UI
             loginManager = LoginManager.getInstance();
 
             loginManager.logInWithPublishPermissions(activity, permissionNeeds);
 
+            //this loginManager helps you eliminate adding a LoginButton to your UI
+
+
+            Log.d("STTTTTTTTTT", "Yeah ");
 
             loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>()
             {
                 @Override
                 public void onSuccess(LoginResult loginResult)
                 {
+                    Log.d("STTTTTTTTTT", "onSuccess: ");
                     sharePhotoToFacebook();
                 }
 
                 @Override
                 public void onCancel()
                 {
-                    System.out.println("onCancel");
+                    Log.d("STTTTTTTTTT", "onCancel: ");
+
                 }
 
                 @Override
                 public void onError(FacebookException error) {
+                    Log.d("STTTTTTTTTT", "onError: ");
 
                 }
 

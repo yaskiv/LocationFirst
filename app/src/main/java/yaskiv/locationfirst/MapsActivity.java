@@ -3,10 +3,12 @@ package yaskiv.locationfirst;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
@@ -105,6 +107,24 @@ private  View rootView;
     }
 String path;
     public  static File file1;
+
+    @Override
+
+    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults){
+
+        switch(permsRequestCode){
+
+            case 200:
+
+                boolean audioAccepted = grantResults[0]==PackageManager.PERMISSION_GRANTED;
+
+                boolean cameraAccepted = grantResults[1]== PackageManager.PERMISSION_GRANTED;
+
+                break;
+
+        }
+
+    }
     private View.OnClickListener TakeScreen = new View.OnClickListener() {
         public void onClick(View v)
         {
@@ -115,11 +135,20 @@ String path;
                         public void onSnapshotReady(Bitmap bitmap) {
                             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-                            path=Environment.getExternalStorageDirectory() +
-                                    "/Screenshots/"+System.currentTimeMillis() +".jpg";
+                            path=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/"+String.valueOf( System.currentTimeMillis()) +".jpg";
+
+                            String[] perms = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
+
+                            int permsRequestCode = 200;
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                requestPermissions(perms, permsRequestCode);
+                            }
+
                             //DateFormat.getDateTimeInstance().format(new Date())
                             Log.d("PAth", path);
-                            File file = new File(path);
+
+                            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) ,String.valueOf( System.currentTimeMillis()) +".jpg");
 
                             file1=file;
                             try {

@@ -8,9 +8,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
     <provider
         android:name="com.facebook.FacebookContentProvider"
-        android:authorities="com.facebook.app.FacebookContentProvider221754681563802"
+        android:authorities="com.facebook.app.FacebookContentProvider1021459514664115"
         android:exported="true" />
 
     <application
