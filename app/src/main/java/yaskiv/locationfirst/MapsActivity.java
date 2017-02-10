@@ -116,7 +116,7 @@ String path;
                             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                             bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
                             path=Environment.getExternalStorageDirectory() +
-                                    "/Screenshots/"+"nnnmw" +".jpg";
+                                    "/Screenshots/"+System.currentTimeMillis() +".jpg";
                             //DateFormat.getDateTimeInstance().format(new Date())
                             Log.d("PAth", path);
                             File file = new File(path);
@@ -127,6 +127,7 @@ String path;
                                 FileOutputStream outputStream = new FileOutputStream(file);
                                 outputStream.write(bytes.toByteArray());
                                 outputStream.close();
+startActivity(new Intent(MapsActivity.this,Share.class));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
