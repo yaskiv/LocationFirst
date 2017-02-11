@@ -22,29 +22,41 @@ import java.util.ArrayList;
 public class FullMaps extends AppCompatActivity {
 public ListView listView;
 
+    ArrayList<DataOfMap> dataOfMaps = new ArrayList<DataOfMap>();
+    BoxAdapter boxAdapter;
+
     public static ArrayList<String> list = new ArrayList<>();
     ArrayAdapter<String> adapter;
 public static int position;
+    public  void fillData()
+    {
+        String selectQuery = "SELECT way_name,dateOfway FROM Way";
+        Cursor c = MainActivity.myDatabase.rawQuery(selectQuery,null);
+        if(c.moveToFirst()){
+            do{
+                //assing values
+                dataOfMaps.add(new DataOfMap(c.getString(0),c.getString(1),"Bla bla"));
+                list.add(c.getString(0));
+            }while(c.moveToNext());
+        }
+
+        c.close();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_maps);
         listView=(ListView)findViewById(R.id.list_map) ;
 
-        String selectQuery = "SELECT way_name FROM Way";
-        Cursor c = MainActivity.myDatabase.rawQuery(selectQuery,null);
-  if(c.moveToFirst()){
-            do{
-                //assing values
-                list.add(c.getString(0));
-            }while(c.moveToNext());
-        }
+        // создаем адаптер
+        fillData();
+        boxAdapter = new BoxAdapter(this, dataOfMaps);
 
-        adapter=new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                list);
-        listView.setAdapter(adapter);
-        c.close();
+        // настраиваем список
+        listView = (ListView) findViewById(R.id.list_map);
+        listView.setAdapter(boxAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -52,7 +64,7 @@ public static int position;
             {
 
 
-FullMaps.position=position;
+                FullMaps.position=position;
                 startActivity(new Intent(FullMaps.this,MapsActivity_for_History.class));
             }
         });

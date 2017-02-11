@@ -61,7 +61,8 @@
         <activity android:name=".Share" />
         <activity android:name=".SharingActivity" />
         <activity android:name=".ScreenActivity" />
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".CombineMaps"></activity>
     </application>
 
 </manifest>

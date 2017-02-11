@@ -36,6 +36,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static Context context;
@@ -126,6 +128,10 @@ public class MainActivity extends AppCompatActivity
         public void onClick(View v) {
              ContentValues contentValues = new ContentValues();
             contentValues.put("way_name", text_for_name_of_map.getText().toString());
+
+            Date date = new Date();
+
+            contentValues.put("dateOfway",date.getDate()+"-"+date.getMonth()+"-"+date.getYear());
             myDatabase.insert("Way", null,contentValues );
 String id="";
             String selectQuery = "SELECT id_of_way FROM Way WHERE way_name= ?";
@@ -258,8 +264,8 @@ startActivity(new Intent(MainActivity.this,SettingActivity.class));
         if (id == R.id.my_maps) {
             startActivity(new Intent(MainActivity.this,FullMaps.class));
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.combine_maps) {
+        startActivity(new Intent(MainActivity.this,CombineMaps.class));
 
         } else if (id == R.id.nav_slideshow) {
 
