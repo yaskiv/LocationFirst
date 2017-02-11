@@ -5,6 +5,7 @@ package yaskiv.locationfirst;
  */
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,18 +15,15 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-public class BoxAdapterForComposing extends BaseAdapter {
-    Context ctx;
-    LayoutInflater lInflater;
-    ArrayList<DataOfMap> objects;
+class BoxAdapterForComposing extends BaseAdapter {
+    private LayoutInflater lInflater;
+    private List<DataOfMap> objects;
 
-    public BoxAdapterForComposing(Context context, ArrayList<DataOfMap> screenShots) {
-        ctx = context;
+    BoxAdapterForComposing(Context context, List<DataOfMap> screenShots) {
         objects = screenShots;
-        lInflater = (LayoutInflater) ctx
+        lInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -74,12 +72,12 @@ public class BoxAdapterForComposing extends BaseAdapter {
     }
 
     // товар по позиции
-    DataOfMap getScreenShot(int position) {
+    private DataOfMap getScreenShot(int position) {
         return ((DataOfMap) getItem(position));
     }
 
-    ArrayList<DataOfMap> getBox() {
-        ArrayList<DataOfMap> box = new ArrayList<DataOfMap>();
+    public   ArrayList<DataOfMap> getBox() {
+        ArrayList<DataOfMap> box = new ArrayList<>();
         for (DataOfMap s : objects) {
             // если в корзине
             if (s.box)
@@ -89,7 +87,7 @@ public class BoxAdapterForComposing extends BaseAdapter {
     }
 
     // обработчик для чекбоксов
-    OnCheckedChangeListener myCheckChangeList = new OnCheckedChangeListener() {
+    private OnCheckedChangeListener myCheckChangeList = new OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
             // меняем данные товара (в корзине или нет)

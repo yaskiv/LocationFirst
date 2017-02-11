@@ -11,20 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-public class BoxAdapter extends BaseAdapter {
-    Context ctx;
-    LayoutInflater lInflater;
-DataOfMap dataOfMap ;
-    ArrayList<DataOfMap> objects;
-    BoxAdapter(Context context,ArrayList<DataOfMap> listOdData) {
-        ctx = context;
-        objects=listOdData;
+class BoxAdapter extends BaseAdapter {
+    private LayoutInflater lInflater;
+    private ArrayList<DataOfMap> objects;
+
+    BoxAdapter(Context context, ArrayList<DataOfMap> listOdData) {
+        Context ctx = context;
+        objects = listOdData;
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -55,7 +50,7 @@ DataOfMap dataOfMap ;
             view = lInflater.inflate(R.layout.item, parent, false);
         }
 
-dataOfMap = getScreenShot(position);
+        DataOfMap dataOfMap = getScreenShot(position);
 
         // заполняем View в пункте списка данными из товаров: наименование, цена
         // и картинка
@@ -67,7 +62,7 @@ dataOfMap = getScreenShot(position);
     }
 
     // товар по позиции
-    DataOfMap getScreenShot(int position) {
+    private DataOfMap getScreenShot(int position) {
         return ((DataOfMap) getItem(position));
     }
 

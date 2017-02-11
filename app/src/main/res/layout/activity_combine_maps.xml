@@ -13,6 +13,13 @@
         android:layout_weight="1">
 
     </ListView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:orientation="horizontal">
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +28,14 @@
         android:onClick="showResult"
         android:text="Compose">
     </Button>
+        <EditText
+            android:id="@+id/nameOfCombineMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Write name"
+            />
+    </LinearLayout>
+
     <!--<Button-->
     <!--android:layout_width="wrap_content"-->
     <!--android:layout_height="wrap_content"-->

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FullMaps extends AppCompatActivity {
 public ListView listView;
@@ -35,13 +36,50 @@ public static int position;
         if(c.moveToFirst()){
             do{
                 //assing values
-                dataOfMaps.add(new DataOfMap(c.getString(0),c.getString(1),"Bla bla"));
+                dataOfMaps.add(new DataOfMap(c.getString(0),c.getString(1),"Bla bla",getCoordinate(c.getString(0))));
                 list.add(c.getString(0));
             }while(c.moveToNext());
         }
 
         c.close();
 
+    }
+    private List<Coordinate> getCoordinate(String name)
+    {
+        List<Coordinate> list=new ArrayList<>();
+        String id="";
+        String selectQuery1 = "SELECT id_of_way FROM Way WHERE way_name= ?";
+        Cursor c1 = MainActivity.myDatabase.rawQuery(selectQuery1, new String[]{name});
+        if (c1.moveToFirst()) {
+            id = c1.getString(c1.getColumnIndex("id_of_way"));
+        }
+        c1.close();
+
+
+        String selectQuery = "SELECT Latitude,Longitude FROM Way_of_Data where id_of_way=?";
+        Cursor c2 = MainActivity.myDatabase.rawQuery(selectQuery,new String[]{id});
+        int count=0;
+
+        if(c2.moveToFirst()){
+            do{
+
+                if(count>0){
+
+
+                    try {
+                        list.add( new Coordinate(c2.getString(0), c2.getString(1)));
+                    }
+                    catch (Exception e){}
+                }
+                list.add( new Coordinate(c2.getString(0), c2.getString(1)));
+
+                count++;
+
+
+            }while(c2.moveToNext());
+        }
+        c2.close();
+        return list;
     }
 
     @Override

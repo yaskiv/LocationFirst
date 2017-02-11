@@ -67,6 +67,7 @@ public class MapsActivity_for_History extends FragmentActivity implements OnMapR
 
 
                                     try{
+                                        if(!c.getString(0).equals("0")&&!c.getString(1).equals("0")){
                                         Polygon polygon = MapsActivity_for_History.mMap.addPolygon(new PolygonOptions()
                                                 .add(new LatLng(Double.parseDouble(Latitude),Double.parseDouble( Longitude)),
                                                         new LatLng(Double.parseDouble(c.getString(0)),Double.parseDouble( c.getString(1)))
@@ -74,13 +75,20 @@ public class MapsActivity_for_History extends FragmentActivity implements OnMapR
                                                 .strokeColor(Color.BLACK));
 
                                         Log.d("Polygon",Latitude+ "||"+Longitude);}
+                                    else
+                                        {
+                                            count=0;
+                                        }
+                                    }
                                     catch (Exception e){}
                                 }
-                                Latitude=c.getString(0);
-                                Longitude=c.getString(1);
+                                if(!c.getString(0).equals("0")&&!c.getString(1).equals("0")) {
 
-                                count++;
+                                    Latitude = c.getString(0);
+                                    Longitude = c.getString(1);
 
+                                    count++;
+                                }
 
                             }while(c.moveToNext());
                         }
