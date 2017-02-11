@@ -240,7 +240,10 @@ int i=0;
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+startActivity(new Intent(MainActivity.this,SettingActivity.class));
+
             return true;
+
         }
 
         return super.onOptionsItemSelected(item);
