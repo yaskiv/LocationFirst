@@ -29,7 +29,7 @@ public class CombineMaps extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose_maps);
+        setContentView(R.layout.activity_combine_maps);
 
         // создаем адаптер
         fillData();

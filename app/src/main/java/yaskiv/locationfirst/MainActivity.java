@@ -158,7 +158,9 @@ int i=0;
 
     private View.OnClickListener stopListener = new View.OnClickListener() {
         public void onClick(View v) {
+            MyLocation.listLocation.clear();
             startOrStop = false;
+
         }
     };
     public static String s;
