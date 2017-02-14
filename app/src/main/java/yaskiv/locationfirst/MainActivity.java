@@ -270,7 +270,7 @@ startActivity(new Intent(MainActivity.this,SettingActivity.class));
         startActivity(new Intent(MainActivity.this,CombineMaps.class));
 
         } else if (id == R.id.nav_slideshow) {
-
+            startActivity(new Intent(MainActivity.this,FamousMap.class));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

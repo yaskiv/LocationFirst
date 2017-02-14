@@ -10,22 +10,53 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class FamousMap extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+
+public class FamousMap <T,V> extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_famous_map);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        DatabaseReference myRef = database.getReference("Map");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                Log.d("DBFireBase", "Value is: " + value);
+
+                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                    String name = (String) messageSnapshot.child("name").getValue();
+                    Log.d("DBFireBase", "name is: " + name);
+                   List <String> message = (List<String>) messageSnapshot.child("ListOfCoordinate").getValue();
+                    Log.d("DBFireBase", "List is: " + message.toString());
+                }
+
+
+
+               /*
+                HashMap <T,V>value = (HashMap<T, V>) dataSnapshot.getValue();
+
+
+V vc=value.get("Name1");
+                Collection<V> vsdv=value.values();
+               List<V>value1= new ArrayList<V>(vsdv) ;
+                V vc1=value1.get(0);
+                V vc2=value1.get(1);
+
+
+                Log.d("DBFireBase", "V is: " + vc1.toString());
+                Log.d("DBFireBase", "V is: " + vc2.toString());
+
+
+             //   Log.d("DBFireBase", "Count child is: " +  dataSnapshot.getChildrenCount());
+
+                Log.d("DBFireBase", "Value is: " + value.toString());
+
+                */
             }
 
             @Override
