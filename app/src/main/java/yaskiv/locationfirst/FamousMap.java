@@ -1,8 +1,10 @@
 package yaskiv.locationfirst;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,48 +17,55 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class FamousMap <T,V> extends AppCompatActivity {
+import static yaskiv.locationfirst.ListStaticLisenner.getMap;
+import static yaskiv.locationfirst.ListStaticLisenner.setMap;
 
+public class FamousMap  extends AppCompatActivity {
+private static List<DataOfMap> map = new ArrayList<>();
+
+    private void addToList(DataOfMap m)
+    {
+        final boolean add = map.add(m);
+        Log.d("Res", String.valueOf(add));
+    }
+    private ListView listView;
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_famous_map);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+         listView =(ListView)findViewById(R.id.list_famous_map);
         DatabaseReference myRef = database.getReference("Map");
-
+        context=this;
+final ListStaticLisenner l=new ListStaticLisenner();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                   List<Coordinate> coordinateList= new ArrayList<>();
                     String name = (String) messageSnapshot.child("name").getValue();
-                    Log.d("DBFireBase", "name is: " + name);
-                   List <String> message = (List<String>) messageSnapshot.child("ListOfCoordinate").getValue();
-                    Log.d("DBFireBase", "List is: " + message.toString());
-                }
+                     List <String> message = (List<String>) messageSnapshot.child("ListOfCoordinate").getValue();
+                    for(int i =0 ; i<message.size();i+=2)
+                    {
+                        Coordinate coordinate=new Coordinate(String.valueOf(message.get(i)),String.valueOf(message.get(i+1)));
+                        coordinateList.add(coordinate);
+                    }
+                  DataOfMap dateOfMap=new DataOfMap(name,"","",coordinateList);
+                   map.add(dateOfMap);
 
+                    coordinateList.clear();
 
+                    }
+                setMap(map);
+                List<DataOfMap> map1=new ArrayList<>(getMap());
+                BoxAdapter boxAdapter = new BoxAdapter(context, getMap());
 
-               /*
-                HashMap <T,V>value = (HashMap<T, V>) dataSnapshot.getValue();
+                // настраиваем список
 
+                listView.setAdapter(boxAdapter);
 
-V vc=value.get("Name1");
-                Collection<V> vsdv=value.values();
-               List<V>value1= new ArrayList<V>(vsdv) ;
-                V vc1=value1.get(0);
-                V vc2=value1.get(1);
-
-
-                Log.d("DBFireBase", "V is: " + vc1.toString());
-                Log.d("DBFireBase", "V is: " + vc2.toString());
-
-
-             //   Log.d("DBFireBase", "Count child is: " +  dataSnapshot.getChildrenCount());
-
-                Log.d("DBFireBase", "Value is: " + value.toString());
-
-                */
             }
 
             @Override
@@ -65,6 +74,10 @@ V vc=value.get("Name1");
                 Log.w("DBFireBase", "Failed to read value.", error.toException());
             }
         });
+
+
+
+
     }
 
 

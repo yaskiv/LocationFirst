@@ -86,7 +86,7 @@ public static int position;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_maps);
-        listView=(ListView)findViewById(R.id.list_map) ;
+        //listView=(ListView)findViewById(R.id.list_map) ;
 
         // создаем адаптер
         fillData();

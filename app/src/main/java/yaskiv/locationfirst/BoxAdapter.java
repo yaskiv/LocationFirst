@@ -5,6 +5,7 @@ package yaskiv.locationfirst;
  */
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,9 +16,9 @@ import android.widget.TextView;
 
 class BoxAdapter extends BaseAdapter {
     private LayoutInflater lInflater;
-    private ArrayList<DataOfMap> objects;
+    private List<DataOfMap> objects;
 
-    BoxAdapter(Context context, ArrayList<DataOfMap> listOdData) {
+    BoxAdapter(Context context, List<DataOfMap> listOdData) {
         Context ctx = context;
         objects = listOdData;
         lInflater = (LayoutInflater) ctx
