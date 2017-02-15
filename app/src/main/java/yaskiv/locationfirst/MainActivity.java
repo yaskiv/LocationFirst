@@ -130,8 +130,9 @@ public class MainActivity extends AppCompatActivity
             contentValues.put("way_name", text_for_name_of_map.getText().toString());
 
             Date date = new Date();
-
-            contentValues.put("dateOfway",date.getDate()+"-"+date.getMonth()+"-"+date.getYear());
+int month=date.getMonth()+1;
+            int year =date.getYear()+1900;
+            contentValues.put("dateOfway",date.getDate()+"-"+month+"-"+year);
 
             myDatabase.insert("Way", null,contentValues );
 String id="";

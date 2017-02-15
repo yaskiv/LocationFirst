@@ -63,7 +63,10 @@
         <activity android:name=".ScreenActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".CombineMaps" />
-        <activity android:name=".FamousMap"></activity>
+        <activity android:name=".FamousMap" />
+        <activity
+            android:name=".MapsActivityForFamousMap"
+            android:label="@string/title_activity_maps_for_famous_map"></activity>
     </application>
 
 </manifest>

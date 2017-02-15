@@ -1,11 +1,18 @@
 package yaskiv.locationfirst;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,10 +72,44 @@ final ListStaticLisenner l=new ListStaticLisenner();
                 // настраиваем список
 
                 listView.setAdapter(boxAdapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+                {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, final int position, long arg3)
+                    {
+                double Latitude=0,Longitude=0;
+
+                         for(int i=0;i< map.get(position).list.size();i++)
+                        {
+                            if(i==0)
+                            {
+                                Latitude=Double.valueOf(map.get(position).list.get(i).getLatitude());
+                                Longitude=Double.valueOf(map.get(position).list.get(i).getLongitude());
+                            }
+                            else {
+                                Polygon polygon = MapsActivityForFamousMap.mMap.addPolygon(new PolygonOptions()
+                                        .add(new LatLng(Latitude,Longitude
+                                        ), new LatLng(Double.valueOf(map.get(position).list.get(i).getLatitude())
+                                                , Double.valueOf(map.get(position).list.get(i).getLongitude())
+                                        ))
+                                        .strokeColor(Color.RED));
+                            }
+
+
+
+
+
+                        }
+
+                        startActivity(new Intent(FamousMap.this,MapsActivityForFamousMap.class));
+                    }
+                });
 
             }
 
-            @Override
+
+
+                    @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 Log.w("DBFireBase", "Failed to read value.", error.toException());
