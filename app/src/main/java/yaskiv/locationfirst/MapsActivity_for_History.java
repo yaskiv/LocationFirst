@@ -1,10 +1,16 @@
 package yaskiv.locationfirst;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,11 +21,59 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+
 public class MapsActivity_for_History extends FragmentActivity implements OnMapReadyCallback {
 
     public static GoogleMap mMap;
     public static String Latitude="";
     public static String Longitude="";
+    private View rootView;
+    private Button buttonScreen;
+    String path;
+    private View.OnClickListener TakeScreen = new View.OnClickListener() {
+        public void onClick(View v)
+        {
+
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                public void onMapLoaded() {
+                    mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                        public void onSnapshotReady(Bitmap bitmap) {
+                            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                            path= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) +"/"+String.valueOf( System.currentTimeMillis()) +".jpg";
+
+                            String[] perms = {"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
+
+                            int permsRequestCode = 200;
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                requestPermissions(perms, permsRequestCode);
+                            }
+
+                            //DateFormat.getDateTimeInstance().format(new Date())
+                            Log.d("PAth", path);
+
+                            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) ,String.valueOf( System.currentTimeMillis()) +".jpg");
+
+                            MapsActivity.file1=file;
+                            try {
+                                file.createNewFile();
+                                FileOutputStream outputStream = new FileOutputStream(file);
+                                outputStream.write(bytes.toByteArray());
+                                outputStream.close();
+                                startActivity(new Intent(MapsActivity_for_History.this,Share.class));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            });
+        }};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +83,10 @@ public class MapsActivity_for_History extends FragmentActivity implements OnMapR
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        buttonScreen=(Button)findViewById(R.id.button_screenshot_for_history);
+        buttonScreen.setOnClickListener(TakeScreen);
+        rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+
     }
 
 

@@ -276,7 +276,7 @@ startActivity(new Intent(MainActivity.this,SettingActivity.class));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-            startActivity(new Intent(MainActivity.this,Share.class));
+
 
         } else if (id == R.id.nav_send) {
 
