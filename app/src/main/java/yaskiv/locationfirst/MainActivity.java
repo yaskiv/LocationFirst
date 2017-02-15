@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity
             Date date = new Date();
 
             contentValues.put("dateOfway",date.getDate()+"-"+date.getMonth()+"-"+date.getYear());
+
             myDatabase.insert("Way", null,contentValues );
 String id="";
             String selectQuery = "SELECT id_of_way FROM Way WHERE way_name= ?";
@@ -143,6 +144,7 @@ String id="";
             Log.d("ID=", id);
 
 int i=0;
+            Log.d("List of location",MyLocation.listLocation.toString());
             for (Location loc : MyLocation.listLocation) {
                 ContentValues contentValues1 = new ContentValues();
                 contentValues1.put("id_of_way", id);

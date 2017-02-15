@@ -49,7 +49,7 @@ public class MapsActivity_for_History extends FragmentActivity implements OnMapR
 
                         String id="";
                         String selectQuery1 = "SELECT id_of_way FROM Way WHERE way_name= ?";
-                        Cursor c1 = MainActivity.myDatabase.rawQuery(selectQuery1, new String[]{FullMaps.list.get(FullMaps.position-1)});
+                        Cursor c1 = MainActivity.myDatabase.rawQuery(selectQuery1, new String[]{FullMaps.list.get(FullMaps.position)});
                         if (c1.moveToFirst()) {
                             id = c1.getString(c1.getColumnIndex("id_of_way"));
                         }
